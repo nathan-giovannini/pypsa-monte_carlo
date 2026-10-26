@@ -323,6 +323,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/xyzservices-2026.9.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/yte-1.9.4-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-4.1.2-pyh5ded981_0.conda
+      - conda: https://conda.anaconda.org/gurobi/linux-64/gurobi-13.0.3-py314_0.conda
       osx-64:
       - conda: https://conda.anaconda.org/bioconda/noarch/snakemake-interface-common-1.23.1-pyhdfd78af_0.conda
       - conda: https://conda.anaconda.org/bioconda/noarch/snakemake-interface-executor-plugins-9.4.0-pyh84498cf_0.conda
@@ -608,6 +609,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-1.3.2-hbb4bfdb_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-ng-2.3.3-h646e873_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-hbc1a06c_7.conda
+      - conda: https://conda.anaconda.org/gurobi/osx-64/gurobi-13.0.3-py314_0.conda
       osx-arm64:
       - conda: https://conda.anaconda.org/bioconda/noarch/snakemake-interface-common-1.23.1-pyhdfd78af_0.conda
       - conda: https://conda.anaconda.org/bioconda/noarch/snakemake-interface-executor-plugins-9.4.0-pyh84498cf_0.conda
@@ -893,6 +895,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zlib-1.3.2-h8088a28_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zlib-ng-2.3.3-h31dac16_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hf451053_7.conda
+      - conda: https://conda.anaconda.org/gurobi/osx-arm64/gurobi-13.0.3-py314_0.conda
       win-64:
       - conda: https://conda.anaconda.org/bioconda/noarch/snakemake-interface-common-1.23.1-pyhdfd78af_0.conda
       - conda: https://conda.anaconda.org/bioconda/noarch/snakemake-interface-executor-plugins-9.4.0-pyh84498cf_0.conda
@@ -1170,6 +1173,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-1.3.2-hfd05255_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-ng-2.3.3-h0261ad2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_7.conda
+      - conda: https://conda.anaconda.org/gurobi/win-64/gurobi-13.0.3-py313_0.conda
 packages:
 - conda: https://conda.anaconda.org/bioconda/noarch/snakemake-interface-common-1.23.1-pyhdfd78af_0.conda
   sha256: 6c00ad64aba26fa72a49a4e8f1664dba53f75fe5852425c4a5f1bd676960ccfa
@@ -14523,3 +14527,39 @@ packages:
     - zstd >=1.5.7,<1.6.0a0
   size: 387535
   timestamp: 1786599623274
+- conda: https://conda.anaconda.org/gurobi/linux-64/gurobi-13.0.3-py314_0.conda
+  sha256: 112f0178b0dcae3a91b4ba6482726234bb28772c1f2b82df82ad5eeac6ff4d2e
+  md5: 78ed45388d0c37120d30c205d201683c
+  depends:
+  - python >=3.14,<3.15.0a0
+  - python_abi 3.14.* *_cp314
+  license: LicenseRef-Gurobi-Proprietary
+  size: 48052217
+  timestamp: 1787116952628
+- conda: https://conda.anaconda.org/gurobi/osx-64/gurobi-13.0.3-py314_0.conda
+  sha256: 9a60600fb3f97147f832073b2c529712917f96cf47278cb0c14d3f99d6675662
+  md5: 355b6e2af620f0da0a3b131ca493788c
+  depends:
+  - python >=3.14,<3.15.0a0
+  - python_abi 3.14.* *_cp314
+  license: LicenseRef-Gurobi-Proprietary
+  size: 49262321
+  timestamp: 1787117176589
+- conda: https://conda.anaconda.org/gurobi/osx-arm64/gurobi-13.0.3-py314_0.conda
+  sha256: cf8ee0136803b3b6057c7b9ed41146040e6b42d8ff432e597e0c913da47757bc
+  md5: 20a5d8c26c09f630a61c4ab052c359f5
+  depends:
+  - python >=3.14,<3.15.0a0
+  - python_abi 3.14.* *_cp314
+  license: LicenseRef-Gurobi-Proprietary
+  size: 44171400
+  timestamp: 1787117701290
+- conda: https://conda.anaconda.org/gurobi/win-64/gurobi-13.0.3-py313_0.conda
+  sha256: 84706962a5f69a68fee886cdf7d6793878db12ce75d2ff8653142b18dead09c2
+  md5: 5b8d390cdc018acd862ef527980a8f84
+  depends:
+  - python >=3.13,<3.14.0a0
+  - python_abi 3.13.* *_cp313
+  license: LicenseRef-Gurobi-Proprietary
+  size: 43787891
+  timestamp: 1787117079958
