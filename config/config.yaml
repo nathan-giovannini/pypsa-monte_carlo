@@ -29,6 +29,11 @@ solver:
 #                  normal:     mean, std
 #                  triangular: min, mode, max
 #                  lognormal:  mean, std   (of the sampled variable, mean > 0)
+#                  beta:       a, b, [min, max]   (support rescaled to min..max, default 0..1)
+#                  gamma:      shape, scale
+#                  randint:    min, max   (integers, inclusive)
+#                  poisson:    mu
+#                  choice:     values: [...], [probabilities: [...]]   (equal odds if omitted)
 # ---------------------------------------------------------------------------
 uncertainties:
 
