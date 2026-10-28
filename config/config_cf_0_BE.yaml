@@ -1,0 +1,62 @@
+# All user input for the Monte Carlo workflow. Paths are relative to the repo root.
+
+study: example-50-BE                       # results go to results/<study>/
+network: inputs/solved_OBZ_n_cf_0_BE.nc           # reference PyPSA network (NetCDF)
+fix_expansion: true                  # force every *_extendable flag to False
+country_bus_prefix_length: 2         # bus "DE1" -> "DE" (ignored if buses have a 'country' column)
+voll: 3000                           # EUR/MWh, used for consumer surplus
+
+monte_carlo:
+  samples: 50                        # number of networks to generate / optimize
+  seed: 42                           # reproducibility
+  lhs_strength: 1                    # 1 = classic LHS; 2 = orthogonal LHS (samples must be a prime square)
+  lhs_optimization: null             # null | random-cd | lloyd
+
+solver:
+  name: gurobi
+  threads: 1                         # snakemake threads reserved per solve
+  options: {threads: 1}              # passed as solver_options to n.optimize()
+
+# ---------------------------------------------------------------------------
+# Uncertainties
+#   target.kind    static -> n.<component>.<attribute>
+#                  timeseries -> n.<component>_t.<attribute> (all snapshots)
+#   selector       names / carrier / countries / query (pandas query) -- AND
+#   mode           relative -> value * sample      (sample is a factor, e.g. 1.05)
+#                  absolute -> value + sample      (spread over selected assets
+#                                                   proportionally to current value)
+#   distribution   uniform:    min, max
+#                  normal:     mean, std
+#                  triangular: min, mode, max
+#                  lognormal:  mean, std   (of the sampled variable, mean > 0)
+#                  beta:       a, b, [min, max]   (support rescaled to min..max, default 0..1)
+#                  gamma:      shape, scale
+#                  randint:    min, max   (integers, inclusive)
+#                  poisson:    mu
+#                  choice:     values: [...], [probabilities: [...]]   (equal odds if omitted)
+# ---------------------------------------------------------------------------
+uncertainties:
+
+  - name: gas_marginal_cost
+    target: {component: generators, attribute: marginal_cost, kind: static}
+    selector: {carrier: [CCGT]}
+    mode: relative
+    distribution: {type: triangular, min: 0.8, mode: 1.0, max: 1.2}
+
+  - name: demand_level
+    target: {component: loads, attribute: p_set, kind: timeseries}
+    selector: {countries: [NL, BE, LU]}
+    mode: relative
+    distribution: {type: triangular, min: 0.9, mode: 1.0, max: 1.1}
+
+  - name: nuclear_power
+    target: {component: generators, attribute: p_nom, kind: static}
+    selector: {carrier: [Nuclear]}
+    mode: relative
+    distribution: {type: choice, values: [0.0, 1.0], probabilities: [0.2, 0.8]}
+  
+  - name: Less-transmission
+    target: {component: links, attribute: p_nom, kind: static}
+    selector: {names: ['BE-NL']}
+    mode: absolute
+    distribution: {type: choice, values: [-1000.0, 0.0], probabilities: [0.2, 0.8]}

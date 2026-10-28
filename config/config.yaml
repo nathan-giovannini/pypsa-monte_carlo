@@ -1,6 +1,6 @@
 # All user input for the Monte Carlo workflow. Paths are relative to the repo root.
 
-study: example-50                       # results go to results/<study>/
+study: example-50-discrete                       # results go to results/<study>/
 network: inputs/solved_OBZ.nc           # reference PyPSA network (NetCDF)
 fix_expansion: true                  # force every *_extendable flag to False
 country_bus_prefix_length: 2         # bus "DE1" -> "DE" (ignored if buses have a 'country' column)
@@ -53,10 +53,10 @@ uncertainties:
     target: {component: generators, attribute: p_nom, kind: static}
     selector: {carrier: [Nuclear]}
     mode: relative
-    distribution: {type: triangular, min: 0.0, mode: 1.0, max: 1.0}
+    distribution: {type: choice, values: [0.0, 1.0], probabilities: [0.2, 0.8]}
   
   - name: Less-transmission
     target: {component: links, attribute: p_nom, kind: static}
     selector: {names: ['BE-NL']}
     mode: absolute
-    distribution: {type: triangular, min: -1000.0, mode: 0.0, max: 1.0}
+    distribution: {type: choice, values: [-1000.0, 0.0], probabilities: [0.2, 0.8]}
