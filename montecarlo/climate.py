@@ -4,8 +4,9 @@ Each climate year is a PyPSA network (NetCDF) stored in `profiles_dir/<year>.nc`
 Only the time series that exist in the reference network are replaced:
   loads_t.p_set          demand
   generators_t.p_max_pu  renewable availability
-The snapshots must match the reference exactly, so the switch must run before any
-other timeseries uncertainty multiplies the same attributes.
+Values are matched by position: the climate year must have the same number of snapshots as
+the reference, but its timestamps may differ (e.g. 2008 vs 2009). The reference's timestamps
+are kept. The switch must run before any other timeseries uncertainty multiplies the same attributes.
 """
 
 from pathlib import Path
@@ -37,10 +38,10 @@ def apply_climate_year(network, year, profiles_dir):
     if not path.exists():
         raise FileNotFoundError(f"No profile file for climate year {int(year)}: {path}")
     source = pypsa.Network(str(path))
-    if not source.snapshots.equals(network.snapshots):
+    if len(source.snapshots) != len(network.snapshots):
         raise ValueError(
-            f"Snapshots of {path} do not match the reference network "
-            f"({len(source.snapshots)} vs {len(network.snapshots)}); check leap years/timezone."
+            f"{path} has {len(source.snapshots)} snapshots, reference has "
+            f"{len(network.snapshots)}; climate years must have the same length (check leap years)."
         )
     n = network.copy()
     for comp_t, attr in TIMESERIES:
