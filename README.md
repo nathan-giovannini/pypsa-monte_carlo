@@ -14,3 +14,14 @@ as a design column (`climate_year`) and applied before the other uncertainties.
 
 Stages: reference (expansion disabled) -> LHS design -> one perturbed network per sample
 -> optimize each (separate rule) -> `summary.csv` + `welfare_by_country.csv` in `results/<study>/`.
+
+## Scenarios (derived networks)
+List derived networks under `scenarios:` in `config/config.yaml`; each removes named projects
+from the reference (`remove: {links: [...], generators: [...]}`). All scenarios and `base` share
+one LHS design, so sample *i* is comparable across scenarios. Uncertainties that target removed
+assets are skipped in that scenario.
+
+- Everything: `pixi run run` -> `results/<study>/<scenario>/summary.csv` + `results/<study>/comparison.csv`
+  (per-sample cost and delta vs base).
+- One scenario only: `pixi run snakemake -j 4 results/<study>/<scenario>/summary.csv`.
+- Preview: `pixi run snakemake -n`.

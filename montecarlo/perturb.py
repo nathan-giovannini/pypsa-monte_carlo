@@ -39,7 +39,7 @@ def select_assets(static_df, selector, bus_country=None):
     return static_df.index[mask.values]
 
 
-def _apply_one(n, u, value, bus_country):
+def _apply_one(n, u, value, bus_country, skip_empty=False):
     component, attribute = u["target"]["component"], u["target"]["attribute"]
     kind = u["target"].get("kind", "static")
     relative = u.get("mode", "relative") == "relative"
@@ -47,12 +47,16 @@ def _apply_one(n, u, value, bus_country):
     static_df = getattr(n, component)
     assets = select_assets(static_df, u.get("selector"), bus_country)
     if len(assets) == 0:
+        if skip_empty:  # the targeted assets were removed in this derived scenario
+            return
         raise ValueError(f"Uncertainty '{u['name']}' selected no {component}")
 
     if kind == "timeseries":
         ts = getattr(n, f"{component}_t")[attribute]
         cols = [a for a in assets if a in ts.columns]
         if not cols:
+            if skip_empty:
+                return
             raise ValueError(f"None of the selected {component} has a time series '{attribute}'")
         if relative:
             ts.loc[:, cols] = ts.loc[:, cols] * value
@@ -71,9 +75,9 @@ def _apply_one(n, u, value, bus_country):
             static_df.loc[assets, attribute] = vals + share * value
 
 
-def apply_sample(network, uncertainties, sample, bus_country=None):
+def apply_sample(network, uncertainties, sample, bus_country=None, skip_empty=False):
     """Return a COPY of `network` with every uncertainty applied; `sample` maps name -> value."""
     n = network.copy()
     for u in uncertainties:
-        _apply_one(n, u, float(sample[u["name"]]), bus_country)
+        _apply_one(n, u, float(sample[u["name"]]), bus_country, skip_empty)
     return n

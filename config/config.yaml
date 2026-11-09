@@ -66,3 +66,15 @@ uncertainties:
     selector: {names: ['BE-NL']}
     mode: absolute
     distribution: {type: choice, values: [-1000.0, 0.0], probabilities: [0.2, 0.8]}
+
+# ---------------------------------------------------------------------------
+# Scenarios (optional): networks derived from `network` by removing projects.
+#   - 'base' (the unmodified reference) is always run.
+#   - every scenario reuses the same sampled design -> results are paired per sample.
+#   - remove: component -> asset names to delete (generators, links, lines, loads,
+#     storage_units, stores, transformers, buses).
+#   - uncertainties whose selector matches nothing in a derived scenario are skipped.
+# ---------------------------------------------------------------------------
+scenarios:
+  no_BE_NL_link:
+    remove: {links: ['BE-NL']}
