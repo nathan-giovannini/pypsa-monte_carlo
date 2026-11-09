@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import pypsa
 
+from .climate import apply_climate_year
 from .perturb import apply_sample
 from .sampling import make_design
 from .welfare import bus_country_map, welfare_by_country
@@ -32,10 +33,22 @@ def step_prepare_reference(network_path, output, fix_expansion=True):
     n.export_to_netcdf(output)
 
 
+CLIMATE_YEAR = "climate_year"
+
+
+def _design_uncertainties(cfg):
+    """Configured uncertainties, preceded by the climate-year choice when enabled."""
+    cy = cfg.get("climate_years")
+    if not cy:
+        return cfg["uncertainties"]
+    year_choice = {"name": CLIMATE_YEAR, "distribution": {"type": "choice", "values": cy["years"]}}
+    return [year_choice] + cfg["uncertainties"]
+
+
 def step_sample(cfg, output):
     mc = cfg["monte_carlo"]
     design = make_design(
-        cfg["uncertainties"], mc["samples"], mc["seed"],
+        _design_uncertainties(cfg), mc["samples"], mc["seed"],
         strength=mc.get("lhs_strength", 1), optimization=mc.get("lhs_optimization"),
     )
     Path(output).parent.mkdir(parents=True, exist_ok=True)
@@ -47,7 +60,12 @@ def step_build_network(reference, design_csv, sample_id, cfg, output):
     design = pd.read_csv(design_csv, index_col="sample")
     prefix = cfg.get("country_bus_prefix_length")
     bus_country = bus_country_map(n, prefix_length=prefix) if prefix or "country" in n.buses else None
-    n = apply_sample(n, cfg["uncertainties"], design.loc[int(sample_id)], bus_country)
+    row = design.loc[int(sample_id)]
+    cy = cfg.get("climate_years")
+    if cy:
+        # Applied first: the other timeseries uncertainties scale the swapped profiles.
+        n = apply_climate_year(n, int(round(row[CLIMATE_YEAR])), cy["profiles_dir"])
+    n = apply_sample(n, cfg["uncertainties"], row, bus_country)
     Path(output).parent.mkdir(parents=True, exist_ok=True)
     n.export_to_netcdf(output)
 

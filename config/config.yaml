@@ -6,6 +6,12 @@ fix_expansion: true                  # force every *_extendable flag to False
 country_bus_prefix_length: 2         # bus "DE1" -> "DE" (ignored if buses have a 'country' column)
 voll: 3000                           # EUR/MWh, used for consumer surplus
 
+# Optional: sample the climate year (demand + renewable profiles) per network.
+# Each file <profiles_dir>/<year>.nc is a PyPSA network whose snapshots match the reference.
+# climate_years:
+#   years: [2010, 2011, 2012]
+#   profiles_dir: inputs/climate_years
+
 monte_carlo:
   samples: 50                        # number of networks to generate / optimize
   seed: 42                           # reproducibility
