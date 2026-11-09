@@ -1,19 +1,19 @@
 # All user input for the Monte Carlo workflow. Paths are relative to the repo root.
 
-study: example-50-discrete                       # results go to results/<study>/
-network: inputs/solved_OBZ.nc           # reference PyPSA network (NetCDF)
+study: test_on_scenarios                       # results go to results/<study>/
+network: inputs/solved_2040.nc           # reference PyPSA network (NetCDF)
 fix_expansion: true                  # force every *_extendable flag to False
 country_bus_prefix_length: 2         # bus "DE1" -> "DE" (ignored if buses have a 'country' column)
 voll: 3000                           # EUR/MWh, used for consumer surplus
 
 # Optional: sample the climate year (demand + renewable profiles) per network.
 # Each file <profiles_dir>/<year>.nc is a PyPSA network whose snapshots match the reference.
-# climate_years:
-#   years: [2010, 2011, 2012]
-#   profiles_dir: inputs/climate_years
+climate_years:
+  years: [2008, 2009]
+  profiles_dir: inputs/climate_years
 
 monte_carlo:
-  samples: 50                        # number of networks to generate / optimize
+  samples: 3                        # number of networks to generate / optimize
   seed: 42                           # reproducibility
   lhs_strength: 1                    # 1 = classic LHS; 2 = orthogonal LHS (samples must be a prime square)
   lhs_optimization: null             # null | random-cd | lloyd
@@ -57,12 +57,30 @@ uncertainties:
 
   - name: nuclear_power
     target: {component: generators, attribute: p_nom, kind: static}
-    selector: {carrier: [Nuclear]}
+    selector: {carrier: [nuclear]}
     mode: relative
     distribution: {type: choice, values: [0.0, 1.0], probabilities: [0.2, 0.8]}
   
-  - name: Less-transmission
-    target: {component: links, attribute: p_nom, kind: static}
-    selector: {names: ['BE-NL']}
-    mode: absolute
-    distribution: {type: choice, values: [-1000.0, 0.0], probabilities: [0.2, 0.8]}
+  # - name: Less-transmission
+  #   target: {component: links, attribute: p_nom, kind: static}
+  #   selector: {names: ['BE-NL']}
+  #   mode: absolute
+  #   distribution: {type: choice, values: [-1000.0, 0.0], probabilities: [0.2, 0.8]}
+
+# ---------------------------------------------------------------------------
+# Scenarios (optional): networks derived from `network` by removing projects.
+#   - 'base' (the unmodified reference) is always run.
+#   - every scenario reuses the same sampled design -> results are paired per sample.
+#   - remove: component -> asset names to delete (generators, links, lines, loads,
+#     storage_units, stores, transformers, buses).
+#   - uncertainties whose selector matches nothing in a derived scenario are skipped.
+# ---------------------------------------------------------------------------
+scenarios:
+  no-Nautilus:
+    remove: {buses: ['BE hybrid hub'], generators: ['BE offwind hybrid'], links: ['Nautilus BE'], links: ['Nautilus GB']}
+  no-TritonLink:
+    remove: {buses: ['DK hybrid hub'], generators: ['DK offwind hybrid'], links: ['Triton Link BE', 'Triton Link hybrid', 'Triton Link DK']}
+  no-LionLink:
+    remove: {links: ['Lionlink GB']}
+  bundle:
+    remove: {buses: ['BE hybrid hub','DK hybrid hub'], generators: ['BE offwind hybrid', 'DK offwind hybrid'], links: ['Nautilus BE','Nautilus GB','Triton Link BE','Triton Link hybrid','Triton Link DK','Lionlink GB']}
