@@ -3,3 +3,6 @@ results/
 __pycache__/
 .pixi/
 inputs/
+inputs/*
+config/
+config/*
