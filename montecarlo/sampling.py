@@ -83,6 +83,8 @@ def validate_uncertainty(u):
         raise ValueError(f"'{name}': lognormal mean must be > 0")
     if u.get("mode", "relative") not in ("relative", "absolute"):
         raise ValueError(f"'{name}': mode must be 'relative' or 'absolute'")
+    if not isinstance(u.get("per_asset", False), bool):
+        raise ValueError(f"'{name}': per_asset must be true or false")
 
 
 def make_design(uncertainties, samples, seed, strength=1, optimization=None):

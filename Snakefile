@@ -61,12 +61,14 @@ rule derive_network:
 
 # one design for every scenario -> samples are paired across scenarios
 rule sample:
+    input:
+        f"{STUDY}/base/reference.nc",
     output:
         f"{STUDY}/design.csv",
     params:
         cfg=config,
     run:
-        steps.step_sample(params.cfg, output[0])
+        steps.step_sample(params.cfg, input[0], output[0])
 
 
 rule build_network:

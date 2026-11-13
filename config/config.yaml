@@ -31,6 +31,8 @@ solver:
 #   mode           relative -> value * sample      (sample is a factor, e.g. 1.05)
 #                  absolute -> value + sample      (spread over selected assets
 #                                                   proportionally to current value)
+#   per_asset      true -> each selected asset gets its own independent sample
+#                  (default false: all selected assets share one sample)
 #   distribution   uniform:    min, max
 #                  normal:     mean, std
 #                  triangular: min, mode, max
