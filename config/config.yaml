@@ -77,7 +77,7 @@ uncertainties:
 # ---------------------------------------------------------------------------
 scenarios:
   no-Nautilus:
-    remove: {buses: ['BE hybrid hub'], generators: ['BE offwind hybrid'], links: ['Nautilus BE'], links: ['Nautilus GB']}
+    remove: {buses: ['BE hybrid hub'], generators: ['BE offwind hybrid'], links: ['Nautilus BE', 'Nautilus GB']}
   no-TritonLink:
     remove: {buses: ['DK hybrid hub'], generators: ['DK offwind hybrid'], links: ['Triton Link BE', 'Triton Link hybrid', 'Triton Link DK']}
   no-LionLink:

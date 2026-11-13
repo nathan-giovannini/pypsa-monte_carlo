@@ -1,0 +1,113 @@
+# All user input for the Monte Carlo workflow. Paths are relative to the repo root.
+
+study: example-cy                  # results go to results/<study>/
+network: inputs/solved_2040.nc           # reference PyPSA network (NetCDF)
+fix_expansion: true                  # force every *_extendable flag to False
+country_bus_prefix_length: 2         # bus "DE1" -> "DE" (ignored if buses have a 'country' column)
+voll: 3000                           # EUR/MWh, used for consumer surplus
+
+# Optional: sample the climate year (demand + renewable profiles) per network.
+# Each file <profiles_dir>/<year>.nc is a PyPSA network whose snapshots match the reference.
+climate_years:
+  years: [2008, 2009]
+  profiles_dir: inputs/climate_years
+
+monte_carlo:
+  samples: 3                        # number of networks to generate / optimize
+  seed: 42                           # reproducibility
+  lhs_strength: 1                    # 1 = classic LHS; 2 = orthogonal LHS (samples must be a prime square)
+  lhs_optimization: null             # null | random-cd | lloyd
+
+solver:
+  name: gurobi
+  threads: 1                         # snakemake threads reserved per solve
+  options: {threads: 1}              # passed as solver_options to n.optimize()
+
+# ---------------------------------------------------------------------------
+# Uncertainties
+#   target.kind    static -> n.<component>.<attribute>
+#                  timeseries -> n.<component>_t.<attribute> (all snapshots)
+#   selector       names / carrier / countries / query (pandas query) -- AND
+#   mode           relative -> value * sample      (sample is a factor, e.g. 1.05)
+#                  absolute -> value + sample      (spread over selected assets
+#                                                   proportionally to current value)
+#   distribution   uniform:    min, max
+#                  normal:     mean, std
+#                  triangular: min, mode, max
+#                  lognormal:  mean, std   (of the sampled variable, mean > 0)
+#                  beta:       a, b, [min, max]   (support rescaled to min..max, default 0..1)
+#                  gamma:      shape, scale
+#                  randint:    min, max   (integers, inclusive)
+#                  poisson:    mu
+#                  choice:     values: [...], [probabilities: [...]]   (equal odds if omitted)
+# ---------------------------------------------------------------------------
+uncertainties:
+  - name: res_capacity
+    target: {component: generators, attribute: p_nom, kind: static}
+    selector: {carrier: [solar, onwind]}
+    mode: relative
+    distribution: {type: uniform, min: 0.87, max: 1.23}  	
+
+  - name: gas_marginal_cost
+    target: {component: generators, attribute: marginal_cost, kind: static}
+    selector: {carrier: [CCGT]}
+    mode: absolute
+    distribution: {type: uniform, min: 93.56666667, max: 177.9666667}  	
+
+  - name: nuclear_power_ES
+    target: {component: generators, attribute: p_nom, kind: static}
+    selector: {names: [ES00 nuclear]}
+    mode: relative
+    distribution: {type: choice, values: [0.0, 1.0], probabilities: [0.5, 0.5]}
+
+  - name: nuclear_power_BE
+    target: {component: generators, attribute: p_nom, kind: static}
+    selector: {names: [BE00 nuclear]}
+    mode: relative
+    distribution: {type: choice, values: [0.0, 1.0], probabilities: [0.5, 0.5]}
+
+  - name: nuclear_power_SE
+    target: {component: generators, attribute: p_nom, kind: static}
+    selector: {names: [SE03 nuclear, SE04 nuclear]}
+    mode: relative
+    distribution: {type: choice, values: [0.0, 1.0], probabilities: [0.5, 0.5]}
+
+  - name: nuclear_power_HU
+    target: {component: generators, attribute: p_nom, kind: static}
+    selector: {names: [HU00 nuclear]}
+    mode: relative
+    distribution: {type: choice, values: [1.0, 2.0], probabilities: [0.5, 0.5]} 
+
+  - name: demand_level
+    target: {component: loads, attribute: p_set, kind: timeseries}
+    selector: {}
+    mode: relative
+    distribution: {type: uniform, min: 0.85, max: 1.0}
+
+
+  
+  # - name: Less-transmission
+  #   target: {component: links, attribute: p_nom, kind: static}
+  #   selector: {names: ['BE-NL']}
+  #   mode: absolute
+  #   distribution: {type: choice, values: [-1000.0, 0.0], probabilities: [0.2, 0.8]}
+
+
+scenarios:
+  no-Nautilus:
+    remove: {buses: ['BE hybrid hub'], generators: ['BE offwind hybrid'], links: ['Nautilus BE', 'Nautilus GB']}
+  no-TritonLink:
+    remove: {buses: ['DK hybrid hub'], generators: ['DK offwind hybrid'], links: ['Triton Link BE', 'Triton Link hybrid', 'Triton Link DK']}
+  no-LionLink:
+    remove: {links: ['Lionlink GB']}
+  no-DE-GB_interconnector:
+    remove: {links: ['DE00-GB00-DC']}
+  no-FR-GB_interconnector:
+    remove: {links: ['FR00-UK00 Real 1']}
+  
+  bundle:
+    remove: {buses: ['BE hybrid hub','DK hybrid hub'],
+     generators: ['BE offwind hybrid', 'DK offwind hybrid'], 
+     links: ['Nautilus BE','Nautilus GB','Triton Link BE','Triton Link hybrid','Triton Link DK','Lionlink GB', 'DE00-GB00-DC', 'FR00-UK00 Real 1']
+    }
+
