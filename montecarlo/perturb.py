@@ -6,6 +6,8 @@ An uncertainty states:
   mode      relative: value * sample
             absolute: value + sample, distributed over the selected assets
                       proportionally to their current value
+  per_asset true: every selected asset gets its own independent sample
+            (see expand_per_asset)
 """
 
 import pandas as pd
@@ -37,6 +39,30 @@ def select_assets(static_df, selector, bus_country=None):
     if selector.get("query"):
         mask &= static_df.index.isin(static_df.query(selector["query"]).index)
     return static_df.index[mask.values]
+
+
+def expand_per_asset(network, uncertainties, bus_country=None):
+    """Replace each `per_asset` uncertainty by one uncertainty per selected asset.
+
+    The expanded copy is named '<name>[<asset>]' and selects only that asset, so it is
+    sampled and applied independently. Uncertainties selecting nothing are kept as-is,
+    so the usual empty-selection handling still applies.
+    """
+    out = []
+    for u in uncertainties:
+        if not u.get("per_asset"):
+            out.append(u)
+            continue
+        assets = select_assets(getattr(network, u["target"]["component"]), u.get("selector"), bus_country)
+        if len(assets) == 0:
+            out.append(u)
+            continue
+        for asset in assets:
+            single = {k: v for k, v in u.items() if k != "per_asset"}
+            single["name"] = f"{u['name']}[{asset}]"
+            single["selector"] = {"names": [asset]}
+            out.append(single)
+    return out
 
 
 def _apply_one(n, u, value, bus_country, skip_empty=False):

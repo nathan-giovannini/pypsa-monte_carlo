@@ -7,6 +7,9 @@ a workflow to perform a Montecarlo simulation on a pypsa network
    (target/selector/mode/distribution).
 3. `pixi run run` (= `snakemake -j 4 --configfile config/config.yaml`).
 
+Set `per_asset: true` on an uncertainty to sample each selected asset independently.
+By default, selected assets share one sample.
+
 Optional climate years: set `climate_years` (`years`, `profiles_dir`) in the config. Each
 `<profiles_dir>/<year>.nc` is a PyPSA network with the same snapshots as the reference; its
 `loads_t.p_set` and `generators_t.p_max_pu` replace the reference profiles. The year is sampled
