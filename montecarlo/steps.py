@@ -98,10 +98,7 @@ def step_sample(cfg, reference, output):
     mc = cfg["monte_carlo"]
     n = pypsa.Network(reference)
     uncertainties = expand_per_asset(n, cfg["uncertainties"], _bus_country(n, cfg))
-    design = make_design(
-        _design_uncertainties(cfg, uncertainties), mc["samples"], mc["seed"],
-        strength=mc.get("lhs_strength", 1), optimization=mc.get("lhs_optimization"),
-    )
+    design = make_design(_design_uncertainties(cfg, uncertainties), mc["samples"], mc["seed"])
     Path(output).parent.mkdir(parents=True, exist_ok=True)
     design.to_csv(output)
 
