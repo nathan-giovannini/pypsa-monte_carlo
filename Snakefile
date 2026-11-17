@@ -1,7 +1,7 @@
 """
 Monte Carlo workflow. Stages:
   1. prepare_reference  reference network with capacity expansion disabled
-  2. sample             Latin Hypercube design from the configured uncertainties
+  2. sample             scrambled Sobol design from the configured uncertainties
   3. build_network      one perturbed network per sample (not optimized)
   4. optimize           separate stage: solve each network
   5. aggregate          cost + welfare summaries
@@ -23,6 +23,11 @@ STUDY = f"results/{config['study']}"
 SCEN = steps.scenarios(config)
 IDS = list(range(config["monte_carlo"]["samples"]))
 SC = r"[^/]+"
+
+
+def cfg_part(*keys):
+    """Only the config keys a rule reads, so unrelated edits (e.g. 'samples') don't rerun it."""
+    return {k: config[k] for k in keys if k in config}
 
 
 rule all:
@@ -66,7 +71,7 @@ rule sample:
     output:
         f"{STUDY}/design.csv",
     params:
-        cfg=config,
+        cfg=cfg_part("monte_carlo", "uncertainties", "climate_years", "country_bus_prefix_length"),
     run:
         steps.step_sample(params.cfg, input[0], output[0])
 
@@ -74,14 +79,17 @@ rule sample:
 rule build_network:
     input:
         reference=f"{STUDY}/{{scenario}}/reference.nc",
-        design=f"{STUDY}/design.csv",
+        # ancient: the design grows with 'samples' but existing rows never change (prefix-stable
+        # Sobol), so a rewritten design.csv must not force every network to be rebuilt
+        design=ancient(f"{STUDY}/design.csv"),
     output:
         f"{STUDY}/{{scenario}}/networks/{{i}}.nc",
     wildcard_constraints:
         i=r"\d+",
         scenario=SC,
     params:
-        cfg=config,
+        cfg=cfg_part("uncertainties", "climate_years", "country_bus_prefix_length"),
+        seed=config["monte_carlo"]["seed"],  # changing the seed changes the design: must rebuild
         derived=lambda wc: bool(SCEN[wc.scenario]),
     run:
         steps.step_build_network(
@@ -100,7 +108,7 @@ rule optimize:
         i=r"\d+",
         scenario=SC,
     params:
-        cfg=config,
+        cfg=cfg_part("solver", "country_bus_prefix_length", "voll"),
     threads: config["solver"].get("threads", 1)
     run:
         steps.step_optimize(input[0], params.cfg, output.network, output.welfare, output.metrics)

@@ -15,13 +15,17 @@ Optional climate years: set `climate_years` (`years`, `profiles_dir`) in the con
 `loads_t.p_set` and `generators_t.p_max_pu` replace the reference profiles. The year is sampled
 as a design column (`climate_year`) and applied before the other uncertainties.
 
-Stages: reference (expansion disabled) -> LHS design -> one perturbed network per sample
+Stages: reference (expansion disabled) -> scrambled Sobol design -> one perturbed network per sample
 -> optimize each (separate rule) -> `summary.csv` + `welfare_by_country.csv` in `results/<study>/`.
+
+Increasing `samples` (same `seed`) keeps the existing samples: the Sobol design is prefix-stable,
+so only the new samples are built and optimized. Changing `seed` or the uncertainties redraws the
+design and rebuilds the networks.
 
 ## Scenarios (derived networks)
 List derived networks under `scenarios:` in `config/config.yaml`; each removes named projects
 from the reference (`remove: {links: [...], generators: [...]}`). All scenarios and `base` share
-one LHS design, so sample *i* is comparable across scenarios. Uncertainties that target removed
+one Sobol design, so sample *i* is comparable across scenarios. Uncertainties that target removed
 assets are skipped in that scenario.
 
 - Everything: `pixi run run` -> `results/<study>/<scenario>/summary.csv` + `results/<study>/comparison.csv`

@@ -1,4 +1,6 @@
-"""Experimental design: Latin Hypercube Sampling mapped to the configured distributions."""
+"""Experimental design: scrambled Sobol sequence mapped to the configured distributions."""
+
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -87,17 +89,22 @@ def validate_uncertainty(u):
         raise ValueError(f"'{name}': per_asset must be true or false")
 
 
-def make_design(uncertainties, samples, seed, strength=1, optimization=None):
+def make_design(uncertainties, samples, seed):
     """Return a DataFrame (samples x uncertainties) of sampled values.
 
     For `relative` uncertainties the value is a multiplicative factor,
     for `absolute` ones it is an additive delta (same unit as the attribute).
+
+    Scrambled Sobol points are prefix-stable: for a fixed seed, the first n rows
+    are identical for any larger sample count, so finished samples stay valid.
     """
     for u in uncertainties:
         validate_uncertainty(u)
-    sampler = qmc.LatinHypercube(d=len(uncertainties), strength=strength,
-                                 optimization=optimization, seed=seed)
-    unit = sampler.random(n=samples)
+    sampler = qmc.Sobol(d=len(uncertainties), scramble=True, seed=seed)
+    with warnings.catch_warnings():
+        # balance properties only hold for powers of 2; prefix stability needs any n
+        warnings.filterwarnings("ignore", message=".*balance properties.*", category=UserWarning)
+        unit = sampler.random(n=samples)
     cols = {u["name"]: _ppf(u["distribution"], unit[:, i]) for i, u in enumerate(uncertainties)}
     design = pd.DataFrame(cols)
     design.index.name = "sample"
