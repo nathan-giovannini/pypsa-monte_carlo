@@ -3,6 +3,5 @@ results/
 __pycache__/
 .pixi/
 inputs/
-inputs/*
-config/
-config/*
+config/custom_config/
+.idea/
