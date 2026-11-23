@@ -1,0 +1,25 @@
+# CBA post-processing input. Paths are relative to the repo root.
+reference: results/example-50-discrete/welfare_by_country.csv
+
+# Optional: restrict outputs to these countries (default: all)
+countries: [BE, NL]
+
+# Each project: counterfactual = results of the network WITHOUT the project.
+#   children   projects it bundles (a project may appear in several bundles).
+#              A bundle with no `counterfactual` gets SEW = sum of its children.
+#   cost       project cost, same unit/period as the welfare values (optional)
+#   cost_share country -> fraction of the cost borne (must sum to 1; optional)
+projects:
+  BE:
+    counterfactual: results/example-50-BE/welfare_by_country.csv
+    cost: 100000000
+    cost_share: {BE: 0.6, NL: 0.4}
+  NL:
+    counterfactual: results/example-50-NL/welfare_by_country.csv
+    cost: 80000000
+    cost_share: {NL: 1.0}
+  pool:
+    counterfactual: results/example-50-pool/welfare_by_country.csv
+    children: [BE, NL]
+    cost: 180000000
+    cost_share: {BE: 0.5, NL: 0.5}
