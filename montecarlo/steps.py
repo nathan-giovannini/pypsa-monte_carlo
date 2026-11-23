@@ -32,10 +32,11 @@ def step_prepare_reference(network_path, output, fix_expansion=True):
     """Load the reference network and forbid any capacity expansion."""
     n = pypsa.Network(network_path)
     if fix_expansion:
-        for comp, flag in EXTENDABLE.items():
-            df = getattr(n, comp)
-            if flag in df.columns:
-                df[flag] = False
+        # for comp, flag in EXTENDABLE.items():
+        #     df = getattr(n, comp)
+        #     if flag in df.columns:
+        #         df[flag] = False
+        n.optimize.fix_optimal_capacities()
     Path(output).parent.mkdir(parents=True, exist_ok=True)
     n.export_to_netcdf(output)
 
