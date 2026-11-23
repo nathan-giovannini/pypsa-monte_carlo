@@ -38,3 +38,15 @@ A solve that fails (infeasible, solver error, crash) does not stop the workflow.
 `status: failed` row in `summary.csv` (empty cost) and is left out of `welfare_by_country.csv` and
 the cost deltas in `comparison.csv`. Rerun after fixing the cause; Snakemake only redoes unfinished samples
 if you delete their `optimized/<i>/metrics.json` (or use `--rerun-incomplete`/`--forcerun optimize`).
+
+## Bundling analysis
+
+Generate the standalone-versus-bundle ex-ante and ex-post tables and plots:
+
+```bash
+pixi run python scripts/bundling_analysis.py --study analysis_v0
+```
+
+Outputs are written to `results/<study>/bundling_analysis/`. Use `--cost-file`,
+`--results-dir`, or `--output-dir` to override the default project-cost workbook,
+results root, or output location.

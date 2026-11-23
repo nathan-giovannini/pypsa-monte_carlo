@@ -3,12 +3,27 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="BackgroundAgentGlobalSettings">
+    <option name="selectedModelId" value="auto" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="92ecd73b-cda7-4ebd-80dd-2b185121f3e3" name="Changes" comment="" />
+    <list default="true" id="92ecd73b-cda7-4ebd-80dd-2b185121f3e3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pixi.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pixi.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pixi.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pixi.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/post_proc_cba.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/post_proc_cba.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/Users/ng-work/Models/pypsa-monte_carlo" value="3MViDJRxA1cVT3yTH4t7GmOhmvI" />
+    </persistenceIdMap>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -25,28 +40,112 @@
     &quot;accountId&quot;: &quot;94b25f6b-234e-43c2-85ee-80f5ddb4c66c&quot;
   }
 }</component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.00013469650147" />
+      <entry key="S2" value="1.1077332392170025" />
+      <entry key="S5" value="1.4160185003069476" />
+      <entry key="S10" value="1.7195013878080474" />
+      <entry key="S30" value="2.59170696392484" />
+      <entry key="S60" value="4.962576509302004" />
+      <entry key="M2" value="10.548591203274736" />
+      <entry key="M5" value="19.87853678030036" />
+      <entry key="M10" value="31.654576923682924" />
+      <entry key="M15" value="43.454160338409366" />
+      <entry key="M30" value="69.88742922519464" />
+      <entry key="H1" value="101.26435945884003" />
+      <entry key="H2" value="133.39938853083655" />
+      <entry key="H4" value="159.09454372247683" />
+      <entry key="D1" value="188.84000519946" />
+      <entry key="W1" value="194.94867998216753" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9460576467255959" />
+      <entry key="MS500" value="0.989104682465703" />
+      <entry key="S2" value="1.104777962925001" />
+      <entry key="S5" value="1.4146201898412656" />
+      <entry key="S10" value="1.7186867494418006" />
+      <entry key="S30" value="2.5913086210443588" />
+      <entry key="S60" value="4.962211433874436" />
+      <entry key="M2" value="10.54821769025771" />
+      <entry key="M5" value="19.878259329773385" />
+      <entry key="M10" value="31.6543510531736" />
+      <entry key="M15" value="43.453936599973225" />
+      <entry key="M30" value="69.88704993023926" />
+      <entry key="H1" value="101.26365984831607" />
+      <entry key="H2" value="133.39862536105645" />
+      <entry key="H4" value="159.0939695489945" />
+      <entry key="D1" value="188.83986976776532" />
+      <entry key="W1" value="194.94865943713742" />
+    </decayedShown>
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
   <component name="ProjectId" id="3LLDELYJJrrCV6TOUa1R8Lqt9Wo" />
+  <component name="ProjectSessionTemplates">
+    <option name="panelTemplate">
+      <template>
+        <option name="ensembleEnabled" value="true" />
+        <option name="modeId" value="Agent" />
+        <option name="model">
+          <model>
+            <option name="modelType" value="builtin_id" />
+            <option name="modelValue" value="ensemble" />
+          </model>
+        </option>
+        <option name="targetType" value="BACKGROUND" />
+        <option name="worktreeMode" value="WORKSPACE" />
+      </template>
+    </option>
+    <option name="version" value="1" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.cba.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;add__module&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.web.browsers&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.cba.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "postproc__local__test",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "python.packages.toolwindow.project.migrated.to.right.top.v2": "true",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-9f8e2b94138c-36ea0e71a18c-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.26094.141" />
+        <option value="bundled-python-sdk-9e1d95ea72ba-e0583fc556d1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-263.7307.329" />
       </set>
     </attachedChunks>
   </component>
@@ -59,5 +158,8 @@
       <updated>1793224341961</updated>
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

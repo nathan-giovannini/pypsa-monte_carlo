@@ -13,6 +13,8 @@ numpy = "*"
 highspy = "*"
 netcdf4 = "*"
 gurobi = ">=12.0.3"
+openpyxl = "*"
+matplotlib = "*"
 
 [tasks]
 run = "snakemake -j 4 --configfile config/config.yaml"
